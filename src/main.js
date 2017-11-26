@@ -9,6 +9,7 @@ Vue.use(VueRouter);
 //导入组件对象
 import layout from './components/layout.vue';
 import goodslist from './components/goods/goodslist.vue';
+import goodsinfo from './components/goods/goodsinfo.vue';
 //实例化对象并且定义路由规则
 var router = new VueRouter({
   routes:[
@@ -17,7 +18,8 @@ var router = new VueRouter({
     //布局
     {name:'layout',path:'/site',component:layout,
     children:[
-      {name:'goodslist',path:'goodslist',component:goodslist}
+      {name:'goodslist',path:'goodslist',component:goodslist},
+      {name:'goodsinfo',path:'goodsinfo/:goodsid',component:goodsinfo}
     ]
   }
   ]
@@ -41,14 +43,25 @@ axios.defaults.withCredentials = true;
 Vue.prototype.$ajax = axios;
 
 //定义一个全局过滤器
-Vue.filter('datefmt',(input)=>{
+Vue.filter('datefmt',(input , fmtstring)=>{
   var date = new Date(input);
   var y  =date.getFullYear();
   var m = date.getMonth()+1;
   var d = date.getDate();
-  return y + '-' +m + '-' + d;
+  var h =   date.getHours();
+  var mm = date.getMinutes();
+  var ss = date.getSeconds();
+  if (fmtstring == "YYYY-MM-DD HH:mm:ss"){
+    return y + '-' + m + '-' + d+'  '+h+':'+'mm'+':'+ss;
+  }else{
+    return y + '-' + m + '-' + d;
+  }
  })
 
+
+ //按需导入iview中的affix组件
+ import {Affix} from 'iview';
+ Vue.component('Affix',Affix);
 //绑定到vue中
 Vue.use(elementUI);
 //实例化对象并且定义路由规则

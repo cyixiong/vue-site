@@ -12,6 +12,10 @@
             <a href="/login.html">登录</a>
             <a href="/register.html">注册</a>
             <strong>|</strong>
+            <a href="cart.html" id="layoutbuycar">
+              <i class="iconfont icon-cart"></i>
+              购物车(<span id="shoppingCartCount">{{buyTotalCount}}</span>)
+            </a>
             <!--<a href="/content/contact.html"><i class="iconfont icon-phone"></i>联系我们</a>
                              <a href="/cart.html"><i class="iconfont icon-cart"></i>购物车(<span id="shoppingCartCount"><script type="text/javascript" src="/tools/submit_ajax.ashx?action=view_cart_count"></script></span>)</a>-->
           </div>
@@ -51,9 +55,9 @@
                 </a>
               </li>
               <li>
-                <a target="_blank" href="/admin/index.aspx">
-                  问题提交
-                </a>
+                <router-link to="/site/goodslist">
+                  购物商城
+                </router-link>
               </li>
             </ul>
           </div>
@@ -74,9 +78,12 @@
 </template>
 
 <script>
+
+  import {vm,KEY} from '../kits/bus.js'
   export default {
     data() {
       return {
+        buyTotalCount:0,
       }
     },
    mounted() {
@@ -95,10 +102,25 @@
           $(".out", this).stop().animate({ 'top': '0px' }, 300); // move up - show
           $(".over", this).stop().animate({ 'top': '-48px' }, 300); // move up - hide
         });
+
+        //将曾经购买的总数加载回来
+        var countStr = localStorage.getItem("buyTotalCount");
+        if (countStr !='NaN') {
+          this.buyTotalCount = parseInt(countStr);
+        }
+        //利用vm找那个的$on 方法完成事件的监听
+        vm.$on(KEY,(buycount)=>{
+          this.buyTotalCount +=buycount;
+
+          //将总数存储起来
+          localStorage.setItem('buyTotalCount',this.buyTotalCount);
+        })
       },
     methods: {
     }
   }
 </script>
 <style scoped>
+
+  @import url('../../statics/jqplugins/jqhovernav/jqhoverNav.css')
 </style>

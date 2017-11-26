@@ -51,7 +51,9 @@
                 <!-- 使用element-ui组件的轮播图 -->
                 <el-carousel :interval="5000" arrow="always">
                   <el-carousel-item v-for="item in topinfo.sliderlist" :key="item.id">
-                    <img width="368" height="368" :src="item.img_url" alt="">
+                    <router-link v-bind="{to:'/site/goodsinfo/'+item.id}">
+                      <img width="368" height="368" :src="item.img_url" alt="">
+                    </router-link>
                     <h3>{{ item.title }}</h3>
                   </el-carousel-item>
                 </el-carousel>
@@ -125,7 +127,7 @@
       </div>
     </div>
 
-   
+
   </div>
 </template>
 
@@ -159,8 +161,8 @@
   }
 </script>
 <style>
-   .banner-img .focus-box .el-carousel .el-carousel__container {
-    height: 368px ;
+  .banner-img .focus-box .el-carousel .el-carousel__container {
+    height: 368px;
   }
 
   .banner-img .focus-box .el-carousel .el-carousel__container .el-carousel__item h3 {
@@ -175,7 +177,7 @@
     background-color: #99a9bf;
   }
 
-  .banner-img .focus-box .el-carousel .el-carousel__container .el-carousel__item:nth-child(2n+1) {
+  .banner-img .focus-box .el-carousel .el-carousel__container [9] .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }
 </style>
