@@ -226,7 +226,7 @@
       return {
         offsetObj: {},
         lbcOffSet: {},
-        currentByCount: 1,
+        currentBuyCount: 1,
         pageIndex: 1,
         pageSize: 2,
         totalcount: 0,
@@ -315,16 +315,17 @@
       },
       addCar() {
         //利用vm.$emit()触发事件，将购买数量传入layout.vue组件
-        vm.$emit(KEY, this.currentByCount);
+        // vm.$emit(KEY, this.currentByCount);
 
         //获取到当前商品id和购买的数量调用localstroagehelper.js这个文件中的setItem方法存储值
-        var goodsobj = { gid: this.$route.params.goodsid, count: this.currentByCount };
-        //将当前购买商品的数量存储到localstroage中
+       var goodsobj = { gid: this.$route.params.goodsid, count: this.currentBuyCount };
+        // // 将当前购买商品的数量存储到localStroage中
         setItem(goodsobj);
 
-        //将isshow设置为true
+        this.$store.dispatch('changeCount', goodsobj);
+
+        // 将isshow设置为true，显示出图片
         this.isshow = true;
-        console.log(this.isshow)
       },
       benter(el) {
         el.style.left = this.offsetObj.left + 'px';

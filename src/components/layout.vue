@@ -9,13 +9,16 @@
             <a target="_blank" href="#"></a>
           </div>
           <div id="menu" class="right-box">
-            <a href="/login.html">登录</a>
-            <a href="/register.html">注册</a>
+            <router-link v-if="!islogin" to="/site/login">登录</router-link>
+            <a v-if="!islogin" href="/register.html">注册</a>
             <strong>|</strong>
-            <a href="cart.html" id="layoutbuycar">
+            <a v-if="islogin" href="javascript:;">会员中心</a>
+            <a v-if="islogin" @click="logout" href="javascript:void(0)" >注销</a>
+            <router-link to="/site/car">
               <i class="iconfont icon-cart"></i>
-              购物车(<span id="shoppingCartCount">{{buyTotalCount}}</span>)
-            </a>
+              购物车(
+              <span id="layoutbuycar">{{this.$store.getters.getbuyCount}}</span>)
+            </router-link>
             <!--<a href="/content/contact.html"><i class="iconfont icon-phone"></i>联系我们</a>
                              <a href="/cart.html"><i class="iconfont icon-cart"></i>购物车(<span id="shoppingCartCount"><script type="text/javascript" src="/tools/submit_ajax.ashx?action=view_cart_count"></script></span>)</a>-->
           </div>
@@ -84,6 +87,7 @@
     data() {
       return {
         buyTotalCount:0,
+        islogin:false
       }
     },
    mounted() {
@@ -111,12 +115,37 @@
         //利用vm找那个的$on 方法完成事件的监听
         vm.$on(KEY,(buycount)=>{
           this.buyTotalCount +=buycount;
-
           //将总数存储起来
           localStorage.setItem('buyTotalCount',this.buyTotalCount);
         })
+      
+        this.checkLogin();
+        //利用vm的￥on注册登录状态的改变
+        vm.$on('changelogin',(val)=>{
+          this.checkLogin();
+        })
       },
     methods: {
+      //注销
+      logout(){
+        this.$ajax.get('/site/account/logout').then(res=>{
+          if (res.data.status == 0) {
+            this.islogin = false;
+            localStorage.setItem('logined','false');
+            //跳转到商品列表
+            this.$router.push({name:'goodslist'});
+          }
+        })
+      },
+      checkLogin(){
+        var res = localStorage.getItem('logined');
+        if (res == 'true') {
+          this.islogin  = true;
+        }else{
+          //已经注销
+          this.islogin = false;
+        }
+      }
     }
   }
 </script>
