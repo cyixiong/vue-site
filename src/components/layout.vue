@@ -12,7 +12,7 @@
             <router-link v-if="!islogin" to="/site/login">登录</router-link>
             <a v-if="!islogin" href="/register.html">注册</a>
             <strong>|</strong>
-            <a v-if="islogin" href="javascript:;">会员中心</a>
+            <router-link to="/site/vipcenter" v-if="islogin">会员中心</router-link>
             <a v-if="islogin" @click="logout" href="javascript:void(0)" >注销</a>
             <router-link to="/site/car">
               <i class="iconfont icon-cart"></i>

@@ -118,6 +118,11 @@
           });
         },3000)
     },
+    //表示当准备销毁组件的时候被触发执行(离开这个组件页面就会执行)
+    beforeDestroy(){
+      //清除定时器
+      clearInterval(this.intervalObj);
+    },
     methods: {
       getorderinfo(){
         //确定好的url

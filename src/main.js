@@ -16,6 +16,9 @@ import pay from './components/goods/pay.vue';
 import login from './components/account/login.vue';
 import payamount from './components/pay/payamount.vue';
 import paysuccess from './components/pay/paysuccess.vue';
+import vuelive from './components/vuelive.vue';
+import vipcenter from './components/vip/vipcenter.vue';
+import myorders from './components//vip/myorders.vue';
 
 //实例化对象并且定义路由规则
 var router = new VueRouter({
@@ -43,7 +46,12 @@ var router = new VueRouter({
         //支付页面
         { name: 'pay', path: 'pay/:orderid', component: pay, meta: { checklogin: true } },
         //支付成功的页面
-        { name: 'pcpaysuccess', path: 'pcpaysuccess', component: paysuccess}
+        { name: 'pcpaysuccess', path: 'pcpaysuccess', component: paysuccess},
+        //vue的生命周期钩子函数的作用演示
+        { name: 'pcpaysuccess', path: 'vuelive', component: vuelive},
+        //会员中心
+        { name: 'vipcenter', path: 'vipcenter', component: vipcenter, meta: { checklogin: true }},
+        { name: 'myorders', path: 'myorders', component: myorders, meta: { checklogin: true }},
       ]
     }
   ]
