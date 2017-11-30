@@ -14,18 +14,24 @@ import car from './components/goods/car.vue';
 import shopping from './components/goods/shopping.vue';
 import pay from './components/goods/pay.vue';
 import login from './components/account/login.vue';
+import payamount from './components/pay/payamount.vue';
+import paysuccess from './components/pay/paysuccess.vue';
 
 //实例化对象并且定义路由规则
 var router = new VueRouter({
   routes: [
     //默认跳转的路由规则
     { name: 'default', path: '/', redirect: '/site/goodslist' },
+    //由于payamount.vue 是被手机打开的，所以不需要头部导航，所以路由规则注册在此处
+    {name:'payamount' , path:'/payamount/:orderid',component:payamount},
+    //不用头部导航
+    { name: 'paysuccess', path: '/paysuccess/', component: paysuccess},
     //布局
     {
       name: 'layout', path: '/site', component: layout,
       children: [
         //登录页面
-        {name:'login' ,path:'login',component:login,meta:{nosave:"true"}},
+        { name: 'login', path: 'login', component: login, meta: { nosave: "true" } },
         //商品列表
         { name: 'goodslist', path: 'goodslist', component: goodslist },
         //商品详情页面
@@ -33,9 +39,11 @@ var router = new VueRouter({
         //购物车页面
         { name: 'car', path: 'car', component: car },
         // 下单页
-        { name: 'shopping', path: 'shopping/:ids', component: shopping ,meta:{checklogin:true}},
+        { name: 'shopping', path: 'shopping/:ids', component: shopping, meta: { checklogin: true } },
         //支付页面
-        { name: 'pay', path: 'pay/:orderid', component: pay ,meta: { checklogin: true }}
+        { name: 'pay', path: 'pay/:orderid', component: pay, meta: { checklogin: true } },
+        //支付成功的页面
+        { name: 'pcpaysuccess', path: 'pcpaysuccess', component: paysuccess}
       ]
     }
   ]
@@ -146,30 +154,30 @@ var getters = {
 }
 
 //使用全局守卫检查是否登录
-router.beforeEach((to,form,next)=>{
+router.beforeEach((to, form, next) => {
   //在localstorage中记录用户访问的最后那个页面（存储一个路由对象),排除登录也
-  if(to.meta.nosave != 'true'){
+  if (to.meta.nosave != 'true') {
     //保存的是当前路由对象中的path
-    localStorage.setItem('currentPath',to.path)
+    localStorage.setItem('currentPath', to.path)
   }
 
   //进行登录检测
   if (to.meta.checklogin) {
     //发出ajax请求，
-    axios.get('/site/account/islogin').then(res=>{
+    axios.get('/site/account/islogin').then(res => {
       if (res.data.code == "logined") {
         next();
-      }else{
-        router.push({name:'login'});
+      } else {
+        router.push({ name: 'login' });
       }
     })
-  }else{
+  } else {
     next();
   }
 })
 //7.0将上述四个对私想利用 new vuex store()进行实例化
-var store  = new vuex.Store({
-  state,mutations,actions,getters
+var store = new vuex.Store({
+  state, mutations, actions, getters
 })
 //绑定到vue中
 Vue.use(elementUI);

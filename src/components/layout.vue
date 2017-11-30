@@ -120,7 +120,7 @@
         })
       
         this.checkLogin();
-        //利用vm的￥on注册登录状态的改变
+        //利用vm的$on注册登录状态的改变
         vm.$on('changelogin',(val)=>{
           this.checkLogin();
         })
@@ -130,6 +130,7 @@
       logout(){
         this.$ajax.get('/site/account/logout').then(res=>{
           if (res.data.status == 0) {
+            //注销成功，应该将localstorage中的logined的值变成false，同时要将当前layou.vue中的this.isloing的值设置成false
             this.islogin = false;
             localStorage.setItem('logined','false');
             //跳转到商品列表
