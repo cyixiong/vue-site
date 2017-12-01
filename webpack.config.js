@@ -5,13 +5,26 @@ var htmlwp = require('html-webpack-plugin');
 
 //导入webpack
 var webpack = require("webpack");
+
+//分离css的第一步配置
+var csstck = require('extract-text-webpack-plugin');
  module.exports ={
    //指定webpack的打包的入口文件
-   entry:'./src/main.js',
+  //  entry:'./src/main.js',
+  //打包分离公共组件的第一步
+  entry:{
+    build:'./src/main.js',
+    vendor1:['vue','vue-router','vuex','axios'],
+    vendor2:['element-ui'],
+    vendor3:['v-distpicker'],
+    vendor4:['jquery']
+  },
    //输出文件
    output:{
      path:path.join(__dirname,"/dist"),
-     filename:"build.js"
+    //  filename:"build.js"
+    //打包分离公共组件的第三步要将filename的名字改成[name].js
+    filename:'[name].js'
    },
    //导入jQuery
    resolve:{
@@ -26,13 +39,14 @@ var webpack = require("webpack");
     loaders:[
       {
         test:/\.css$/,
-        loader:'style-loader!css-loader'
+        // loader:'style-loader!css-loader'
+        loader:csstck.extract({fallback:"style-loader",use:"css-loader"})
       }, {
         test: /\.less$/,
-        loader: 'style-loader!css-loader!less-loader'
+        loader: csstck.extract({ fallback: "style-loader", use: "css-loader!less-loader" })
       }, {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader!sass-loader'
+        loader: csstck.extract({ fallback: "style-loader", use: "css-loader!sass-loader" })
       }, {
         test: /\.(png|jpg|gif|woff|ttf|svg|eot)$/,
         loader: 'url-loader?limit=10240'
@@ -60,6 +74,12 @@ var webpack = require("webpack");
     new webpack.ProvidePlugin({
       $:'jquery',
       jQuery:'jquery'
-    })
+    }),
+    //打包分离公共组件的第2步
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ["vendor4", "vendor3", "vendor2","vendor1"],//调用的地方要和定义的地方相反
+      minChunks:Infinity
+    }),
+    new csstck("[name].css")
   ]
  }
