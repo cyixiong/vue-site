@@ -107,7 +107,8 @@
                               <br>
                               <router-link v-if="item.status==1" v-bind="{to:'/site/pay'+item.id}">|去付款</router-link>
                               <br>
-                              <a href="javascript:void(0)">|取消</a>
+                              <!-- <a href="javascript:void(0)">|取消</a> -->
+                                <a href="javascript:void(0)" v-show="item.status==1" @click="cancelConfirm(item.id)">取消订单</a>
                               <br>
                             </td>
                           </tr>
@@ -145,6 +146,33 @@
       this.getorder();
     },
     methods: {
+      //取消订单
+      cancelConfirm(orderid){
+           this.$confirm('您确定要取消此订单吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          //用户点击确定的时候，调用cancelOrder 执行真正的删除操作
+          this.cancelOrder(orderid);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      cancelOrder(orderid){
+        //请求接口完成取消操作
+        var url = '/site/validate/order/cancelorder/'+orderid;
+        this.$ajax.get(url).then(res=>{
+          if (res.data.status == 0) {
+            this.getorder();
+          }else{
+            this.$message.error(res.data.message);
+          }
+        })
+      },
       //定义分页的方法
       sizechange(size){
         this.pageSize = size;
