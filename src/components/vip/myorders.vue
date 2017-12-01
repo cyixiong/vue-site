@@ -103,7 +103,8 @@
                               待付款
                             </td>
                             <td align="left">
-                              <a href="#/site/member/orderinfo/12" class="">查看订单</a>
+                              <!-- <a href="#/site/member/orderinfo/12" class="">查看订单</a> -->
+                              <router-link v-bind="{to:'/site/orderinfo/'+item.id}">查看订单</router-link>
                               <br>
                               <router-link v-if="item.status==1" v-bind="{to:'/site/pay'+item.id}">|去付款</router-link>
                               <br>

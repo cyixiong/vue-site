@@ -19,6 +19,7 @@ import paysuccess from './components/pay/paysuccess.vue';
 import vuelive from './components/vuelive.vue';
 import vipcenter from './components/vip/vipcenter.vue';
 import myorders from './components//vip/myorders.vue';
+import orderinfo from './components//vip/orderinfo.vue';
 
 //实例化对象并且定义路由规则
 var router = new VueRouter({
@@ -51,7 +52,10 @@ var router = new VueRouter({
         { name: 'pcpaysuccess', path: 'vuelive', component: vuelive},
         //会员中心
         { name: 'vipcenter', path: 'vipcenter', component: vipcenter, meta: { checklogin: true }},
+        //订单数据
         { name: 'myorders', path: 'myorders', component: myorders, meta: { checklogin: true }},
+        //订单详情
+        { name: 'orderinfo', path: 'orderinfo/:orderid', component: orderinfo, meta: { checklogin: true }},
       ]
     }
   ]
